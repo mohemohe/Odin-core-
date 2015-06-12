@@ -160,7 +160,7 @@ namespace Odin.Models
 
                     ptr += 4;
 
-                    if (pos < text.LongCount() - 1)
+                    if (pos < text.Length - 1)
                     {
                         pos++;
                     }

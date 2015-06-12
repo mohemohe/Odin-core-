@@ -22,7 +22,7 @@ namespace Odin.Models
         public static string ConvertToString(string text)
         {
             var list = new List<byte>();
-            for (var i = 0; i < text.LongCount(); i += 8)
+            for (var i = 0; i < text.Length; i += 8)
             {
                 var binaryText = text.Substring(i, 8);
                 var byteText = Convert.ToByte(binaryText, 2);

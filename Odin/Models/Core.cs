@@ -24,12 +24,17 @@
 
         public static void Write(string text)
         {
-            var writeText = Text.ConvertToBinary(text);
-            if (!string.IsNullOrEmpty(text))
+            if (image != null)
             {
-                Image.Write(ref image, writeText);
+                Image.Format(ref image);
+
+                var writeText = Text.ConvertToBinary(text);
+                if (!string.IsNullOrEmpty(text))
+                {
+                    Image.Write(ref image, writeText);
+                }
+                IO.SaveImagePNG(ref image);
             }
-            IO.SaveImagePNG(ref image);
         }
     }
 }
