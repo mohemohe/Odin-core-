@@ -1,4 +1,8 @@
-﻿using Livet;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
+using Livet;
 using Livet.Commands;
 using Microsoft.Win32;
 using Odin.Models;
@@ -51,6 +55,7 @@ namespace Odin.ViewModels
 
         public void Initialize()
         {
+            StatusBarProxy.StatusBarText = "ready";
         }
 
         #region FilePath変更通知プロパティ
@@ -63,13 +68,32 @@ namespace Odin.ViewModels
             set
             {
                 if (_FilePath == value)
+                {
                     return;
+                }
                 _FilePath = value;
                 RaisePropertyChanged();
             }
         }
 
         #endregion FilePath変更通知プロパティ
+
+        #region BackgroundImage変更通知プロパティ
+        private BitmapImage _BackgroundImage;
+
+        public BitmapImage BackgroundImage
+        {
+            get
+            { return _BackgroundImage; }
+            set
+            { 
+                if (_BackgroundImage == value)
+                    return;
+                _BackgroundImage = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion BackgroundImage変更通知プロパティ
 
         #region Text変更通知プロパティ
 
@@ -81,13 +105,58 @@ namespace Odin.ViewModels
             set
             {
                 if (_Text == value)
+                {
                     return;
+                }
                 _Text = value;
                 RaisePropertyChanged();
+
+                var task = Models.Text.GetUTF8TextLength(value);
+                task.Wait();
+                TextLength = (task.Result/8).ToString();
             }
         }
 
         #endregion Text変更通知プロパティ
+
+        #region TextLength変更通知プロパティ
+        private string _TextLength = "";
+
+        public string TextLength
+        {
+            get
+            { return _TextLength; }
+            set
+            {
+                //if (_TextLength == value)
+                //{
+                //    return;
+                //}
+                if (Core._image != null)
+                {
+                    _TextLength = value + " / " + (Core._image.Width*Core._image.Height)/8 + "  byte";
+                }
+                RaisePropertyChanged();
+            }
+        }
+        #endregion TextLength変更通知プロパティ
+
+        #region IsEnableButton変更通知プロパティ
+        private bool _IsEnableButton = true;
+
+        public bool IsEnableButton
+        {
+            get
+            { return _IsEnableButton; }
+            set
+            { 
+                if (_IsEnableButton == value)
+                    return;
+                _IsEnableButton = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion IsEnableButton変更通知プロパティ
 
         #region OpenCommand
 
@@ -105,19 +174,30 @@ namespace Odin.ViewModels
             }
         }
 
-        public void Open()
+        public async void Open()
         {
-            var ofd = new OpenFileDialog();
-            ofd.Filter = "Image(*.jpg;*.jpeg;*.png;*.gif;*.bmp)|*.jpg;*.jpeg;*.png;*.gif;*.bmp|All Files(*.*)|*.*";
-            ofd.Title = "Open Image";
-            ofd.RestoreDirectory = true;
+            IsEnableButton = false;
+
+            //TODO: フルMVVMではないので書き直すべき
+            var ofd = new OpenFileDialog
+            {
+                Filter = "Image(*.jpg;*.jpeg;*.png;*.gif;*.bmp)|*.jpg;*.jpeg;*.png;*.gif;*.bmp|All Files(*.*)|*.*",
+                Title = "Open Image",
+                RestoreDirectory = true
+            };
 
             var result = ofd.ShowDialog();
             if (result != null && result.Value)
             {
                 FilePath = ofd.FileName;
-                Text = Core.Read(FilePath);
+                BackgroundImage = new BitmapImage(new Uri(FilePath));
+
+                StatusBarProxy.StatusBarText = "loading...";
+                Text = await Core.Read(FilePath);
+                StatusBarProxy.StatusBarText = "loaded: " + Path.GetFileName(FilePath);
             }
+
+            IsEnableButton = true;
         }
 
         #endregion OpenCommand
@@ -138,9 +218,15 @@ namespace Odin.ViewModels
             }
         }
 
-        public void Write()
+        public async void Write()
         {
-            Core.Write(Text);
+            IsEnableButton = false;
+
+            StatusBarProxy.StatusBarText = "writing...";
+            var filename = await Core.Write(Text);
+            StatusBarProxy.StatusBarText = "wrote! : " + filename;
+
+            IsEnableButton = true;
         }
 
         #endregion WriteCommand

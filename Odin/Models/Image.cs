@@ -2,12 +2,14 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Odin.Models
 {
     internal static class Image
     {
-        public static unsafe void Format(ref BenriImage image)
+        public static unsafe async Task<BenriImage> Format(BenriImage image)
         {
             var bmp = image.Bitmap.LockBits(new Rectangle(Point.Empty, new Size(image.Width, image.Height)),
                 ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
@@ -85,11 +87,12 @@ namespace Odin.Models
                     ptr += 4;
                 }
             }
-
             image.Bitmap.UnlockBits(bmp);
+
+            return image;
         }
 
-        public static unsafe bool IsFormated(ref BenriImage image)
+        public static unsafe async Task<bool> IsFormated(BenriImage image)
         {
             var bmp = image.Bitmap.LockBits(new Rectangle(Point.Empty, new Size(image.Width, image.Height)),
                 ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
@@ -117,7 +120,7 @@ namespace Odin.Models
             return true;
         }
 
-        public static unsafe void Write(ref BenriImage image, string text)
+        public static unsafe async Task<BenriImage> Write(BenriImage image, string text)
         {
             var bmp = image.Bitmap.LockBits(new Rectangle(Point.Empty, new Size(image.Width, image.Height)),
                 ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
@@ -167,17 +170,18 @@ namespace Odin.Models
                     else
                     {
                         image.Bitmap.UnlockBits(bmp);
-                        return;
+                        return image;
                     }
                 }
             }
-
             image.Bitmap.UnlockBits(bmp);
+
+            return image;
         }
 
-        public static unsafe string Read(ref BenriImage image)
+        public static unsafe async Task<string> Read(BenriImage image)
         {
-            var result = "";
+            var result = new StringBuilder(8 * 1024);
 
             var bmp = image.Bitmap.LockBits(new Rectangle(Point.Empty, new Size(image.Width, image.Height)),
                 ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
@@ -193,16 +197,16 @@ namespace Odin.Models
 
                     if ((int) r == 2 || (int) g == 2 || (int) b == 2)
                     {
-                        result += "0";
+                        result.Append("0");
                     }
                     else if ((int) r == 3 || (int) g == 3 || (int) b == 3)
                     {
-                        result += "1";
+                        result.Append("1");
                     }
                     else
                     {
                         image.Bitmap.UnlockBits(bmp);
-                        return result;
+                        return result.ToString();
                     }
 
                     ptr += 4;
@@ -210,7 +214,7 @@ namespace Odin.Models
             }
 
             image.Bitmap.UnlockBits(bmp);
-            return result;
+            return result.ToString();
         }
     }
 }

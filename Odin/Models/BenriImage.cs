@@ -24,6 +24,15 @@ namespace Odin.Models
             FilePath = filePath;
         }
 
+        public BenriImage(BenriImage benriImage)
+        {
+            Bitmap = benriImage.Bitmap;
+            Format = benriImage.Format;
+            Width = benriImage.Width;
+            Height = benriImage.Height;
+            FilePath = benriImage.FilePath;
+        }
+
         public ImageFormat Format { get; private set; }
 
         public int Width { get; private set; }

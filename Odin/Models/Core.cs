@@ -1,40 +1,40 @@
-﻿namespace Odin.Models
+﻿using System.Threading.Tasks;
+
+namespace Odin.Models
 {
     internal static class Core
     {
-        private static BenriImage image;
+        public static BenriImage _image;
 
-        public static string Read(string filePath)
+        public static async Task<string> Read(string filePath)
         {
             var result = "";
 
-            image = IO.ReadImage(filePath);
-            if (Image.IsFormated(ref image))
+            _image = await IO.ReadImage(filePath);
+            if (await Image.IsFormated(_image))
             {
-                var binaryText = Image.Read(ref image);
-                result = Text.ConvertToString(binaryText);
-            }
-            else
-            {
-                Image.Format(ref image);
+                var binaryText = await Image.Read(_image);
+                result = await Text.ConvertToString(binaryText);
             }
 
             return result;
         }
 
-        public static void Write(string text)
+        public static async Task<string> Write(string text)
         {
-            if (image != null)
+            if (_image != null)
             {
-                Image.Format(ref image);
+                var image = _image;
+                image = await Image.Format(image);
 
-                var writeText = Text.ConvertToBinary(text);
+                var writeText = await Text.ConvertToBinary(text);
                 if (!string.IsNullOrEmpty(text))
                 {
-                    Image.Write(ref image, writeText);
+                    image = await Image.Write(image, writeText);
                 }
-                IO.SaveImagePNG(ref image);
+                return await IO.SaveImagePNG(image);
             }
+            return null;
         }
     }
 }

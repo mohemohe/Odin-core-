@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
-
+using System.Reflection;
 using Livet;
 using Livet.Commands;
 using Livet.Messaging;
@@ -60,16 +60,25 @@ namespace Odin.ViewModels
          * 自動的にUIDispatcher上での通知に変換されます。変更通知に際してUIDispatcherを操作する必要はありません。
          */
 
+        private static class ButtonState
+        {
+            internal static string Maximize { get { return "1"; } }
+            internal static string Normal { get { return "2"; } }
+        }
+
         public void Initialize()
         {
-            MaximizeButtonContent = 1.ToString();
+            TitleText = "Odin -core-    " + Assembly.GetExecutingAssembly().GetName().Version;
             Application.Current.MainWindow.StateChanged += MainWindow_StateChanged;
         }
 
         void MainWindow_StateChanged(object sender, EventArgs e)
         {
             var window = sender as Window;
-            WindowState = window.WindowState;
+            if (window != null)
+            {
+                WindowState = window.WindowState;
+            }
         }
 
         #region CloseCommand
@@ -152,16 +161,18 @@ namespace Odin.ViewModels
             set
             {
                 if (_WindowState == value)
+                {
                     return;
+                }
                 _WindowState = value;
 
                 if (value == WindowState.Normal)
                 {
-                    MaximizeButtonContent = 1.ToString();
+                    MaximizeButtonContent = ButtonState.Maximize;
                 }
                 if (value == WindowState.Maximized)
                 {
-                    MaximizeButtonContent = 2.ToString();
+                    MaximizeButtonContent = ButtonState.Normal;
                 }
 
                 RaisePropertyChanged();
@@ -170,7 +181,7 @@ namespace Odin.ViewModels
         #endregion WindowState変更通知プロパティ
 
         #region MaximizeButtonContent変更通知プロパティ
-        private string _MaximizeButtonContent;
+        private string _MaximizeButtonContent = ButtonState.Maximize;
 
         public string MaximizeButtonContent
         {
@@ -179,12 +190,31 @@ namespace Odin.ViewModels
             set
             {
                 if (_MaximizeButtonContent == value)
+                {
                     return;
+                }
                 _MaximizeButtonContent = value;
                 RaisePropertyChanged();
             }
         }
         #endregion MaximizeButtonContent変更通知プロパティ
+
+        #region TitleText変更通知プロパティ
+        private string _TitleText = "Odin core";
+
+        public string TitleText
+        {
+            get
+            { return _TitleText; }
+            set
+            { 
+                if (_TitleText == value)
+                    return;
+                _TitleText = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion TitleText変更通知プロパティ
 
     }
 }

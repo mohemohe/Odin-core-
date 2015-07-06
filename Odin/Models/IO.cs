@@ -2,12 +2,13 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Odin.Models
 {
     internal static class IO
     {
-        public static BenriImage ReadImage(string filePath)
+        public static async Task<BenriImage> ReadImage(string filePath)
         {
             BenriImage image;
             using (var bitmap = new Bitmap(filePath))
@@ -18,7 +19,7 @@ namespace Odin.Models
             return image;
         }
 
-        public static void SaveImage(ref BenriImage image, string filePath = null)
+        public static void SaveImage(BenriImage image, string filePath = null)
         {
             if (filePath == null)
             {
@@ -32,7 +33,7 @@ namespace Odin.Models
             image.Bitmap.Save(filePath, image.Format);
         }
 
-        public static void SaveImagePNG(ref BenriImage image, string filePath = null)
+        public static async Task<string> SaveImagePNG(BenriImage image, string filePath = null)
         {
             if (filePath == null)
             {
@@ -44,6 +45,8 @@ namespace Odin.Models
                 File.Delete(filePath);
             }
             image.Bitmap.Save(filePath, ImageFormat.Png);
+
+            return Path.GetFileName(filePath);
         }
     }
 }

@@ -125,7 +125,17 @@
 							</ColorAnimationUsingKeyFrames>
 						</Storyboard>
 					</VisualState>
-					<VisualState x:Name="Disabled" />
+					<VisualState x:Name="Disabled">
+						<Storyboard>
+							<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="border">
+								<EasingColorKeyFrame KeyTime="0:0:0.1" Value="#FF888888">
+									<EasingColorKeyFrame.EasingFunction>
+										<CubicEase EasingMode="EaseInOut" />
+									</EasingColorKeyFrame.EasingFunction>
+								</EasingColorKeyFrame>
+							</ColorAnimationUsingKeyFrames>
+						</Storyboard>
+					</VisualState>
 				</VisualStateGroup>
 			</VisualStateManager.VisualStateGroups>
 			<ContentPresenter TextBlock.Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />

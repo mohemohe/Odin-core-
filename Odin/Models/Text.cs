@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Odin.Models
 {
     internal static class Text
     {
-        public static string ConvertToBinary(string text)
+        public static async Task<string> ConvertToBinary(string text)
         {
             var result = "";
             var byteText = Encoding.UTF8.GetBytes(text);
@@ -19,7 +20,7 @@ namespace Odin.Models
             return result;
         }
 
-        public static string ConvertToString(string text)
+        public static async Task<string> ConvertToString(string text)
         {
             var list = new List<byte>();
             for (var i = 0; i < text.Length; i += 8)
@@ -32,6 +33,11 @@ namespace Odin.Models
             var result = Encoding.UTF8.GetString(list.ToArray());
 
             return result;
+        }
+
+        public static async Task<long> GetUTF8TextLength(string text)
+        {
+            return Encoding.UTF8.GetBytes(text).Sum(b => Convert.ToString(b, 2).PadLeft(8, '0').Length);
         }
     }
 }
