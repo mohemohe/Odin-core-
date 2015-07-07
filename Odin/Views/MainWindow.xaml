@@ -6,7 +6,7 @@
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
         xmlns:v="clr-namespace:Odin.Views"
         xmlns:vm="clr-namespace:Odin.ViewModels"
-        Title="Odin" Height="360" Width="525">
+        Title="Odin" Height="360" Width="525" Icon="/Odin;component/Resources/icon.ico">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="32" NonClientFrameEdges="None" ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}" />
@@ -69,7 +69,7 @@
             </i:Interaction.Triggers>
 
             <StackPanel Orientation="Horizontal" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <Image Source="/Odin;component/Resources/odin.png" Margin="2,2,0,0"/>
+                <Image Source="/Odin;component/Resources/odin.png" Margin="2,2,0,0" RenderOptions.BitmapScalingMode="Fant"/>
                 <Label Content="Odin -core-" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="8,0,0,0" Foreground="#FFFAFAFF" FontSize="14"/>
                 <Label Content="{Binding Version}" HorizontalAlignment="Left" Margin="8,0,0,0" Foreground="#A8FAFAFF" VerticalAlignment="Bottom" Background="#00000000"/>
             </StackPanel>
