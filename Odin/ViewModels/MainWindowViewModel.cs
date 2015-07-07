@@ -223,8 +223,15 @@ namespace Odin.ViewModels
             IsEnableButton = false;
 
             StatusBarProxy.StatusBarText = "writing...";
-            var filename = await Core.Write(Text);
-            StatusBarProxy.StatusBarText = "wrote! : " + filename;
+            var fileName = await Core.Write(Text);
+            if (!String.IsNullOrEmpty(fileName))
+            {
+                StatusBarProxy.StatusBarText = "wrote! : " + fileName;
+            }
+            else
+            {
+                StatusBarProxy.StatusBarText = "error";
+            }
 
             IsEnableButton = true;
         }
