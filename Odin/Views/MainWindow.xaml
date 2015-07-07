@@ -68,7 +68,11 @@
                 </l:InteractionMessageTrigger>
             </i:Interaction.Triggers>
 
-            <Label Content="{Binding TitleText}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8,0,0,0" Foreground="#FFFAFAFF" FontSize="14"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Image Source="/Odin;component/Resources/odin.png" Margin="2,2,0,0"/>
+                <Label Content="Odin -core-" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="8,0,0,0" Foreground="#FFFAFAFF" FontSize="14"/>
+                <Label Content="{Binding Version}" HorizontalAlignment="Left" Margin="8,0,0,0" Foreground="#A8FAFAFF" VerticalAlignment="Bottom" Background="#00000000"/>
+            </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Top">
                 <Button Content="0" FontFamily="Marlett" Width="28" Height="20" Margin="0,0,1,0" Template="{DynamicResource CaptionButton}" Command="{Binding MinimizeCommand}"/>
                 <Button Content="{Binding MaximizeButtonContent}" FontFamily="Marlett" Width="28" Height="20" Margin="0,0,1,0" Template="{DynamicResource CaptionButton}" Command="{Binding MaximizeCommand}"/>

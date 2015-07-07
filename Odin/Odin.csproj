@@ -53,6 +53,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>1998</NoWarn>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Livet">
       <HintPath>..\packages\LivetCask.1.1.0.0\lib\net45\Livet.dll</HintPath>
@@ -141,6 +144,9 @@
     <Content Include="InfrastructureAssemblies\Livet.XML" />
     <Content Include="InfrastructureAssemblies\Microsoft.Expression.Interactions.dll" />
     <Content Include="InfrastructureAssemblies\System.Windows.Interactivity.dll" />
+    <Resource Include="Resources\odin.png" />
+    <Resource Include="Resources\icon.ico" />
+    <Resource Include="Resources\icon.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

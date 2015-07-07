@@ -68,7 +68,7 @@ namespace Odin.ViewModels
 
         public void Initialize()
         {
-            TitleText = "Odin -core-    " + Assembly.GetExecutingAssembly().GetName().Version;
+            Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             Application.Current.MainWindow.StateChanged += MainWindow_StateChanged;
         }
 
@@ -199,22 +199,22 @@ namespace Odin.ViewModels
         }
         #endregion MaximizeButtonContent変更通知プロパティ
 
-        #region TitleText変更通知プロパティ
-        private string _TitleText = "Odin core";
+        #region Version変更通知プロパティ
+        private string _Version = "0.0.0.0";
 
-        public string TitleText
+        public string Version
         {
             get
-            { return _TitleText; }
+            { return _Version; }
             set
             { 
-                if (_TitleText == value)
+                if (_Version == value)
                     return;
-                _TitleText = value;
+                _Version = value;
                 RaisePropertyChanged();
             }
         }
-        #endregion TitleText変更通知プロパティ
+        #endregion Version変更通知プロパティ
 
     }
 }
