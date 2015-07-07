@@ -111,9 +111,22 @@ namespace Odin.ViewModels
                 _Text = value;
                 RaisePropertyChanged();
 
-                var task = Models.Text.GetUTF8TextLength(value);
-                task.Wait();
-                TextLength = (task.Result/8).ToString();
+                long length;
+                if (value != null)
+                {
+                    var task = Models.Text.GetUTF8TextLength(value);
+                    task.Wait();
+                    length = (task.Result/8);
+                }
+                else
+                {
+                    length = 0;
+                }
+                TextLength = length.ToString();
+                if (Core._image != null)
+                {
+                    IsEnableButton = length <= (Core._image.Width * Core._image.Height) / 8;
+                }
             }
         }
 
@@ -189,6 +202,8 @@ namespace Odin.ViewModels
             var result = ofd.ShowDialog();
             if (result != null && result.Value)
             {
+                Text = null;
+
                 FilePath = ofd.FileName;
                 BackgroundImage = new BitmapImage(new Uri(FilePath));
 
